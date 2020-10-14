@@ -50,9 +50,9 @@ Existem vários problemas com a representação BoW:
 
 ![img](resources/problemas_bow.jpg)
 
-Entrada esparsa - como vimos no exemplo anterior, cada palavra é um *feature*. Portanto, ao fornecer esses dados a um modelo, precisamos informá-lo de que nos referimos à característica número 1 na tabela BoW que é gato, e não à característica número 2 que é cachorro. Fazemos isso executando uma codificação 1-hot nos números: criamos um vetor com o tamanho de todo o vocabulário. Em seguida, fornecemos ao índice que desejamos o valor 1, enquanto todos os outros recebem o valor 0. Então, gato será o vetor (1,0,0,…, | V |), cachorro será (0,1,0,0 ,…, | V |), etc. Para um vocabulário grande (ou seja, | V | é grande), isso significa que muitos dos dados de entrada serão esparsos - ou seja, terão o valor 0.  O impacto da dispersão é que o número de *features* (palavras) será potencialmente muito maior do que o número de exemplos que temos, o que quase certamente levará ao *overfitting*.
+<ins>Entrada esparsa</ins> - como vimos no exemplo anterior, cada palavra é um *feature*. Portanto, ao fornecer esses dados a um modelo, precisamos informá-lo de que nos referimos à característica número 1 na tabela BoW que é gato, e não à característica número 2 que é cachorro. Fazemos isso executando uma codificação 1-hot nos números: criamos um vetor com o tamanho de todo o vocabulário. Em seguida, fornecemos ao índice que desejamos o valor 1, enquanto todos os outros recebem o valor 0. Então, gato será o vetor (1,0,0,…, | V |), cachorro será (0,1,0,0 ,…, | V |), etc. Para um vocabulário grande (ou seja, | V | é grande), isso significa que muitos dos dados de entrada serão esparsos - ou seja, terão o valor 0.  O impacto da dispersão é que o número de *features* (palavras) será potencialmente muito maior do que o número de exemplos que temos, o que quase certamente levará ao *overfitting*.
 
-Sem generalização semântica - neste exemplo, cão é o *feature* nº 1, enquanto gato é o nº 2. Observe que isso é completamente arbitrário. Em particular, isso significa que não podemos generalizar. Em outras palavras, o modelo é incapaz de aplicar o conhecimento que aprendeu sobre gatos aos cães, pois ignora completamente que os dois estão relacionados (ambos são animais, têm 4 patas e um rabo, etc.). Idealmente, teríamos gostado de um modelo que lidasse com animais para entender as semelhanças e também as diferenças entre os animais antes de lidar com nossa tarefa específica. Colocando de forma um tanto figurada, gostaríamos que o modelo mostrasse alguma inteligência inata. O resultado desses dois problemas leva ao fato de que um modelo NLP usando representações BoW exigiria muitos dados, mas ainda poderia fornecer baixa precisão.
+<ins>Sem generalização semântica</ins> - neste exemplo, cão é o *feature* nº 1, enquanto gato é o nº 2. Observe que isso é completamente arbitrário. Em particular, isso significa que não podemos generalizar. Em outras palavras, o modelo é incapaz de aplicar o conhecimento que aprendeu sobre gatos aos cães, pois ignora completamente que os dois estão relacionados (ambos são animais, têm 4 patas e um rabo, etc.). Idealmente, teríamos gostado de um modelo que lidasse com animais para entender as semelhanças e também as diferenças entre os animais antes de lidar com nossa tarefa específica. Colocando de forma um tanto figurada, gostaríamos que o modelo mostrasse alguma inteligência inata. O resultado desses dois problemas leva ao fato de que um modelo NLP usando representações BoW exigiria muitos dados, mas ainda poderia fornecer baixa precisão.
 
  
 
@@ -86,16 +86,20 @@ As propriedades que definem um bom *embedding* são:
 
 <center> x = [0.53, 0.2, -1.2, ….] </center>
 
+</br>
 <ins>São de baixa dimensão </ins>- um *embedding* tem uma dimensionalidade predefinida (escolhida como um hiperparâmetro). Vimos anteriormente que na representação BoW precisávamos de *|V|* entradas para cada palavra, de modo que o tamanho total da entrada seja *|V|\*n* onde n é o número de palavras que usamos como entrada. Com *embeddings*, nosso tamanho de entrada será *d***n*, onde *d* normalmente está entre 50 e 300. Considerando o fato de que grandes corpora de texto geralmente são muito maiores do que 300 palavras, isso significa que temos uma grande economia no tamanho de entrada - o que pode levar a uma melhor precisão alcançada em um número total menor de instâncias de dados.
+
 
 <ins>Incorporam a semântica de domínio </ins>- esta propriedade é provavelmente a mais surpreendente, mas também a mais útil. Quando devidamente treinados, os *embeddings* aprendem sobre o significado de seu domínio. No primeiro exemplo, vemos que subtraindo o *embedding* (vetor) do homem (*man*) daquele do rei (*king*) e, em seguida, com o acréscimo do *embedding* da mulher (*woman*), obtemos o valor aproximado do *embedding* da rainha (*queen*). Em essência, o modelo aprendeu a noção semântica de gênero. No segundo exemplo, o modelo aprendeu o conceito de capital. Observe que esta é exatamente a "inteligência" a priori que discutimos anteriormente!
 
-<center> `king’ - `man` + `woman` ≈ `queen` </center>
+<center> `king’ - `man` + `woman` ≈ `queen` </center> </br>
 
 <center> `paris` - `france` + `spain` ≈ `madrid` </center>
 
+</br>
 <ins>Generaliza facilmente </ins>- Finalmente, em virtude do modelo ter entendido os conceitos semânticos inerentes ao nosso domínio, podemos treinar (os encaixes de) gato, cachorro, elefante, etc. e fazer com que o modelo "entenda" que queremos dizer animais. Quando então apresentamos o modelo com o valor previamente invisível de (incorporação de) ovelha, podemos receber a resposta correta.
 
+</br>
 <ins>Após o treinamento dos embeddings, eles podem ser usados como entrada para tarefas de PLN, como classificação ou recomendação.</ins>
 
 Neste exemplo, comparamos o tamanho da entrada na representação BoW vs. a representação *embeddings*:
@@ -110,7 +114,7 @@ No primeiro caso, temos *n* palavras |V|\* (tamanho do vocabulário) neurônios 
 
 A questão principal agora é como implementar um algoritmo que gere *embeddings* de palavras. Existem vários desses algoritmos, entre eles o mais conhecido Word2Vec que foi inventado por Mikolov et al. enquanto estava no Google. Word2Vec tem duas variantes:
 
-![img](Resources/word2vec.jpg)
+![img](resources/word2vec.jpg)
 
 Continuous Bag-of-Words (CBOW): nesta variante, usando várias palavras de contexto, tentamos prever a palavra-alvo (*target-word*). Observe que, ao somar os vetores *embeddings*, perdemos a ordem das palavras, daí o nome BoW.
 
@@ -143,7 +147,6 @@ Uma propriedade chave do algoritmo Word2Vec é que ele não é supervisionado (o
 ### 1. Redes Neurais Recorrentes e LSTMs
 
  
-
 ![img](resources/rnn.jpg)
 
 Considerando que você conhece as redes neurais Fully-Connected (FC). Pode-se avançar para frente (da camada i para i + 1) ao propagar informações ou para trás (da camada i + 1 para i) ao propagar o erro. Em nenhum momento seguimos na direção horizontal dentro da mesma camada.
