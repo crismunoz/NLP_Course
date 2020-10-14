@@ -9,6 +9,6 @@
 
 
 
-Contact: Cristia Muñoz Villalobos
+PhD. Cristia Muñoz Villalobos
 
 e-mail: crisstrink@gmail.com
