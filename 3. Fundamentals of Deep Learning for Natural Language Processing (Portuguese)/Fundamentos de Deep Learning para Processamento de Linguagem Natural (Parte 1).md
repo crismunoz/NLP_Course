@@ -149,23 +149,23 @@ Uma propriedade chave do algoritmo Word2Vec é que ele não é supervisionado (o
  
 ![img](resources/rnn.jpg)
 
-Considerando que você conhece as redes neurais Fully-Connected (FC). Pode-se avançar para frente (da camada i para i + 1) ao propagar informações ou para trás (da camada i + 1 para i) ao propagar o erro. Em nenhum momento seguimos na direção horizontal dentro da mesma camada.
+Nas redes neurais conhecidas como a Fully-Connected (FC), você pode avançar para frente (da camada i para i + 1) ou propagar informações para trás (da camada i + 1 para i) - por exemplo - ao propagar o erro. Em nenhum momento seguimos na direção horizontal dentro da mesma camada.
 
-Frequentemente, desejamos usar redes neurais com sequencias de entradas ou saídas: em outras palavras, nossa entrada/saída consiste em diferentes valores em diferentes passos de tempo. Para isso, precisamos usar redes neurais recorrentes (*Recurrent Neural Networks -* RNNs). Conforme mostrado no exemplo aqui, em cada passo de tempo temos diferentes entradas (os *X*) e diferentes saídas (os *y*). Além disso, temos o estado do intervalo de tempo anterior (os S) como entrada (com o estado inicial normalmente sendo o vetor 0).
+Frequentemente, desejamos usar redes neurais para lidar com sequencias de entradas ou saídas: em outras palavras, nossa entrada/saída contem valores diferentes em cada passos de tempo. Neste tipo de problemas, precisamos usar redes neurais recorrentes (*Recurrent Neural Networks -* RNNs). Conforme mostrado no exemplo acima, em cada instante de tempo temos diferentes entradas (os *X*) e diferentes saídas (os *y*). Além disso, temos uma variavel de estado do instante de tempo anterior (os S) que é usada como entrada para o seguinte instante de tempo (com o estado inicial normalmente sendo o vetor 0).
 
-O algoritmo usado para treinar RNNs é apenas o Backpropagation tradicional, aplicada a passos de tempo subsequentes e, portanto, conhecido como Backpropagation-Through-Time (BPTT).
+O algoritmo usado para treinar RNNs é apenas o tradicional Backpropagation, aplicada a passos de tempo subsequentes e, portanto, conhecido como Backpropagation-Through-Time (BPTT).
 
  
 
 ### 2. Long Short-Term Memory (LSTM):
 
-RNNs regulares são notoriamente difíceis de treinar. Por causa dos vários passos de tempo, gradientes de erro muitas vezes tendem a encolher ("desaparecer") ou crescer ("explodir") exponencialmente. Isso significa que os RNNs vanilla têm dificuldade com sequências longas, como as que precisamos para lidar com sequências de texto longas.
+As RNNs tradicionais são notoriamente difíceis de treinar. Quando treina-se para longas sequencias, a gradientes do erro muitas vezes tendem a encolher ("desaparecer") ou crescer ("explodir") exponencialmente. Isso significa que as RNNs vanilla têm dificuldade para tratar sequências longas, como as que precisamos para lidar com muitas sequências de texto.
 
 ![img](resources/lstm.jpg)
 
 ![img](resources/lstm_eq.jpg)
 
-Uma modificação no RNN padrão é a célula Long Short-Term Memory (LSTM), que supera muitos dos problemas mencionados. Essencialmente, é um conjunto de vários neurônios conhecidos como portas junto com uma célula de memória. Em cada etapa de tempo, a célula recebe entrada (*x*) junto com o conteúdo da célula (*c*) e o estado oculto (*h*) da etapa de tempo anterior. Os portões têm as seguintes funções:
+Uma modificação do RNN padrão é a célula Long Short-Term Memory (LSTM), que supera muitos dos problemas mencionados. Básicamente, é um conjunto de vários neurônios, conhecidos como portas, junto com uma célula de memória. Em cada instante de tempo, a célula recebe a entrada (*x*) junto com a célula de memória (*c*) e o estado oculto (*h*) da etapa de instante de tempo anterior. Os portões têm as seguintes funções:
 
 Porta de esquecimento (*f*) - quais partes da célula de memória devem ser "esquecidas"
 
